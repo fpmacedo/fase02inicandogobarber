@@ -3,6 +3,7 @@
 import express from 'express';
 import routes from './routes';
 
+// chama o arquivo de database index.js
 import './database';
 
 class App {
