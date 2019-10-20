@@ -1,14 +1,19 @@
 // MIDDLEWARE PARA QUE O USUARIO SO ACESE DETERMINADAS PAGINAS
 // SE ESTIVER LOGADO
 import jwt from 'jsonwebtoken';
+// importa o promisify permitindo usar a sintaxe async await no verify
 import { promisify } from 'util';
 
+// importa o segredo do token
 import authConfig from '../../config/auth';
 
 export default async (req, res, next) => {
+  // busca o header da req enviada pelo insomnia
   const authHeader = req.headers.authorization;
 
+  // verifica caso na o tenha header
   if (!authHeader) {
+    // console.log('Token not provided');
     return res.status(401).json({ error: 'Token not provided' });
   }
 
@@ -18,15 +23,17 @@ export default async (req, res, next) => {
   const [, token] = authHeader.split(' ');
 
   try {
+    // promisify nao retorna callback
+    // /jwt verify defodifica o token do usuario com o segredo
     const decoded = await promisify(jwt.verify)(token, authConfig.secret);
-
-    // req.userId =
-    console.log(decoded);
+    // joga o id do usuario para dentro da requisicao
+    req.userId = decoded.id;
+    // console.log(decoded);
 
     return next();
   } catch (err) {
     return res.status(401).json({ error: 'Token invalid' });
   }
 
-  return next();
+  // return next();
 };

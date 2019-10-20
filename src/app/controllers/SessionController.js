@@ -1,11 +1,27 @@
 // CRONTOLLER PARA CRIAR UMA SESSAO DE USUARIO
 // instalar yarn add jsonwebtoken
 import jwt from 'jsonwebtoken';
+import * as Yup from 'yup';
 import User from '../models/User';
 import authConfig from '../../config/auth';
+// importa o modelo usuario
 
 class SessionController {
   async store(req, res) {
+    // cria um objeto yup para a verificacao dos dados recebidos
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+      email: Yup.string()
+        .email()
+        .required(),
+      password: Yup.string()
+        .required()
+        .min(6),
+    });
+    // verifica se todos os parametros dentro do schema sao validos
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
     // pega email e password do corpo da requisicao
     const { email, password } = req.body;
     // verifica se o e-mail do usuario ja existe no bd
