@@ -1,4 +1,4 @@
-// ARQUIVO PARA DEFINIR O MODEL
+// ARQUIVO PARA DEFINIR O MODEL DE ARQUIVOS
 import Sequelize, { Model } from 'sequelize';
 
 class File extends Model {
@@ -8,6 +8,13 @@ class File extends Model {
       {
         name: Sequelize.STRING,
         path: Sequelize.STRING,
+        url: {
+          type: Sequelize.VIRTUAL,
+          // retorna o link do avata para o frontend
+          get() {
+            return `http://localhost:3333/files/${this.path}`;
+          },
+        },
       },
       {
         sequelize,

@@ -10,6 +10,7 @@ import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
 import authMiddleware from './app/middleware/auth';
 import FileController from './app/controllers/FileController';
+import ProviderController from './app/controllers/ProviderController';
 
 // cria variavel routes que ira conter o metodo Routes
 const routes = new Router();
@@ -21,6 +22,8 @@ routes.post('/sessions', SessionController.store);
 // routes para definir o middleware para todas as rotas daqui para baixo
 routes.use(authMiddleware);
 routes.put('/users', UserController.update);
+
+routes.get('/providers', ProviderController.index);
 
 // configura uma rota para receber a imagem de um unico arquivo
 routes.post('/files', upload.single('file'), FileController.store);

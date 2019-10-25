@@ -1,4 +1,4 @@
-// ARQUIVO PARA DEFINIR O MODEL
+// ARQUIVO PARA DEFINIR O MODEL DE USUARIO
 import Sequelize, { Model } from 'sequelize';
 // importa o bcrypt para hash password
 import bcrypt from 'bcryptjs';
@@ -33,7 +33,7 @@ class User extends Model {
 
   // cria o metodo para associar o campo avatar_id ao model do usuario
   static associate(models) {
-    this.belongsTo(models.File, { foreignKey: 'avatar_id' });
+    this.belongsTo(models.File, { foreignKey: 'avatar_id', as: 'avatar' });
   }
 
   // metodo para verificar se o parametro password passado e o hash
