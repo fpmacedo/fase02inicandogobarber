@@ -31,6 +31,11 @@ class User extends Model {
     return this;
   }
 
+  // cria o metodo para associar o campo avatar_id ao model do usuario
+  static associate(models) {
+    this.belongsTo(models.File, { foreignKey: 'avatar_id' });
+  }
+
   // metodo para verificar se o parametro password passado e o hash
   // sao iguais verificando se a senha e verdadeira
   checkPassword(password) {

@@ -18,6 +18,7 @@ class App {
 
   // metodo middlewares
   middlewares() {
+    // informa ao express que ele tem que ler JSON no corpo das msgs POST
     this.server.use(express.json());
   }
 

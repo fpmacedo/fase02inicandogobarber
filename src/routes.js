@@ -1,16 +1,19 @@
 /* importa o metodo Router de dentro do express para nao importar o
 express inteiro */
 import { Router } from 'express';
-
+import multer from 'multer';
+import multerConfig from './config/multer';
 // import User from './app/models/User';
 
 // importa o UserController
 import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
 import authMiddleware from './app/middleware/auth';
+import FileController from './app/controllers/FileController';
 
 // cria variavel routes que ira conter o metodo Routes
 const routes = new Router();
+const upload = multer(multerConfig);
 
 routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
@@ -18,6 +21,9 @@ routes.post('/sessions', SessionController.store);
 // routes para definir o middleware para todas as rotas daqui para baixo
 routes.use(authMiddleware);
 routes.put('/users', UserController.update);
+
+// configura uma rota para receber a imagem de um unico arquivo
+routes.post('/files', upload.single('file'), FileController.store);
 
 // routes.get('/', async (req, res) => {
 //   const user = await User.create({
