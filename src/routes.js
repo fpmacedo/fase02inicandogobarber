@@ -13,6 +13,7 @@ import FileController from './app/controllers/FileController';
 import ProviderController from './app/controllers/ProviderController';
 import AppointmentController from './app/controllers/AppointmentController';
 import ScheduleController from './app/controllers/ScheduleController';
+import NotificationController from './app/controllers/NotificationController';
 
 // cria variavel routes que ira conter o metodo Routes
 const routes = new Router();
@@ -30,8 +31,14 @@ routes.get('/providers', ProviderController.index);
 routes.get('/appointments', AppointmentController.index);
 // rota para armazenar agendamentos
 routes.post('/appointments', AppointmentController.store);
+// rota para deletar os agendamentos
+routes.delete('/appointments/:id', AppointmentController.delete);
 // rota para listar os agendamentos para o prestador de servio
 routes.get('/schedule', ScheduleController.index);
+// cria rota para listar as notificacoes
+routes.get('/notifications', NotificationController.index);
+// cria notificacao para alterar a notificacao
+routes.put('/notifications/:id', NotificationController.update);
 // configura uma rota para receber a imagem de um unico arquivo
 routes.post('/files', upload.single('file'), FileController.store);
 
