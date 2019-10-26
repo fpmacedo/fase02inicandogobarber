@@ -11,6 +11,8 @@ import SessionController from './app/controllers/SessionController';
 import authMiddleware from './app/middleware/auth';
 import FileController from './app/controllers/FileController';
 import ProviderController from './app/controllers/ProviderController';
+import AppointmentController from './app/controllers/AppointmentController';
+import ScheduleController from './app/controllers/ScheduleController';
 
 // cria variavel routes que ira conter o metodo Routes
 const routes = new Router();
@@ -22,9 +24,14 @@ routes.post('/sessions', SessionController.store);
 // routes para definir o middleware para todas as rotas daqui para baixo
 routes.use(authMiddleware);
 routes.put('/users', UserController.update);
-
+// rota para listar providers
 routes.get('/providers', ProviderController.index);
-
+// rota para listar agendamentos do usuario
+routes.get('/appointments', AppointmentController.index);
+// rota para armazenar agendamentos
+routes.post('/appointments', AppointmentController.store);
+// rota para listar os agendamentos para o prestador de servio
+routes.get('/schedule', ScheduleController.index);
 // configura uma rota para receber a imagem de um unico arquivo
 routes.post('/files', upload.single('file'), FileController.store);
 
