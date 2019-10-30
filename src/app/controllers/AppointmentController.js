@@ -5,7 +5,8 @@ import Appointment from '../models/Appointment';
 import User from '../models/User';
 import File from '../models/File';
 import Notification from '../schemas/Notification';
-import Mail from '../../lib/Mail';
+import CancellationMail from '../Jobs/CancellationMail';
+import Queue from '../../lib/Queue';
 
 class AppointmentController {
   async index(req, res) {
@@ -14,8 +15,10 @@ class AppointmentController {
     const { page = 1 } = req.query;
     const appointments = await Appointment.findAll({
       where: { user_id: req.userId, canceled_at: null },
+      // define como vai ser ordenado
       order: ['date'],
-      attributes: ['id', 'date'],
+      // define o que e retornado ao front end
+      attributes: ['id', 'date', 'past', 'cancelable'],
       // limita em 20 registros por pagina
       limit: 20,
       // faz com que nao seja pulado nenhum registro
@@ -143,20 +146,8 @@ class AppointmentController {
 
     // salva o agendamento
     await appointment.save();
-    // envia o email avisando o cancelamento
-    await Mail.sendMail({
-      to: `${appointment.provider.name} <${appointment.provider.email}>`,
-      subject: 'Agendamento cancelado',
-      // carrega o template para o email
-      template: 'cancellation',
-      context: {
-        provider: appointment.provider.name,
-        user: appointment.user.name,
-        date: format(appointment.date, "'dia' dd 'de' MMMM', às' H:mm'h'", {
-          locale: pt,
-        }),
-      },
-    });
+
+    await Queue.add(CancellationMail.key, { appointment });
 
     return res.json(appointment);
   }

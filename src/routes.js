@@ -14,7 +14,7 @@ import ProviderController from './app/controllers/ProviderController';
 import AppointmentController from './app/controllers/AppointmentController';
 import ScheduleController from './app/controllers/ScheduleController';
 import NotificationController from './app/controllers/NotificationController';
-
+import AvailableController from './app/controllers/AvailableController';
 // cria variavel routes que ira conter o metodo Routes
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -27,6 +27,8 @@ routes.use(authMiddleware);
 routes.put('/users', UserController.update);
 // rota para listar providers
 routes.get('/providers', ProviderController.index);
+// rota para verificar todos os horarios disponiveis de um provider
+routes.get('/providers/:providerId/available', AvailableController.index);
 // rota para listar agendamentos do usuario
 routes.get('/appointments', AppointmentController.index);
 // rota para armazenar agendamentos
