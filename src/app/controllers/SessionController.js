@@ -3,6 +3,7 @@
 import jwt from 'jsonwebtoken';
 import * as Yup from 'yup';
 import User from '../models/User';
+import File from '../models/File';
 import authConfig from '../../config/auth';
 // importa o modelo usuario
 
@@ -25,7 +26,16 @@ class SessionController {
     // pega email e password do corpo da requisicao
     const { email, password } = req.body;
     // verifica se o e-mail do usuario ja existe no bd
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({
+      where: { email },
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'path', 'url'],
+        },
+      ],
+    });
     // verifica se o usuario existe a partir do email
     if (!user) {
       return res.status(401).json({ error: 'User not found' });
@@ -35,13 +45,15 @@ class SessionController {
       return res.status(401).json({ error: 'Password does not match' });
     }
 
-    const { id, name } = user;
+    const { id, name, avatar, provider } = user;
     // retorna os dados do usuario
     return res.json({
       user: {
         id,
         name,
         email,
+        provider,
+        avatar,
       },
       // gera o token da sessao do usuario, jogando o id que e o payload
       // do JWT e o segundo parametro e o verificador que e unico

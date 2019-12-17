@@ -2,6 +2,7 @@
 // importar express
 import express from 'express';
 import path from 'path';
+import cors from 'cors';
 import * as Sentry from '@sentry/node';
 // importar express-async-errors antes de routes
 import 'express-async-errors';
@@ -31,6 +32,8 @@ class App {
   middlewares() {
     // metodo para iniciar o sentry
     this.server.use(Sentry.Handlers.requestHandler());
+    // cors
+    this.server.use(cors());
     // informa ao express que ele tem que ler JSON no corpo das msgs POST
     this.server.use(express.json());
     // metodo para servir arquivos estaticos avatar etc
