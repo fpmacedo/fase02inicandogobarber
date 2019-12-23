@@ -13,7 +13,7 @@ class ScheduleController {
       return res.status(401).json({ error: 'User is not a provider' });
     }
 
-    // recupra a data da requisicao query exemplo 2019-10-27T00:00:00-03:00
+    // recupera a data da requisicao query exemplo 2019-10-27T00:00:00-03:00
     // http://localhost:3333/schedule?date=2019-10-27T00%3A00%3A00-03%3A00
     const { date } = req.query;
     const parsedDate = parseISO(date);
